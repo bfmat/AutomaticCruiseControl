@@ -28,10 +28,10 @@ class Robot : IterativeRobot() {
     // Called periodically during autonomous mode
     // The car should always be in autonomous mode when enabled
     override fun autonomousPeriodic() {
-        // Read the data from the LIDAR data file
-        val lidarData = lidarDataFile.readText()
-        // Convert the data directly to a floating-point number representing the speed
-        val vehicleSpeed = lidarData.toDouble()
-        // Do stuff with the speed
+        // Read the data from the LIDAR data file and convert it to a relay state representing
+        // whether the relay should be on or off
+        val relayState = lidarDataFile.readText().toBoolean()
+        // Set the relay's state accordingly using relay state values
+        acceleratorRelay.set(if (relayState) Relay.Value.kOn else Relay.Value.kOff)
     }
 }
