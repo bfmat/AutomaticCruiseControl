@@ -16,9 +16,6 @@ class Robot : IterativeRobot() {
     // The relay that controls the accelerator
     private lateinit var acceleratorRelay: Relay
 
-    // The file containing the data that should be written by the software managing the LIDAR sensor
-    private val lidarDataFile = File(LIDAR_DATA_FILE_PATH)
-
     // Called when the robot class is initialized
     override fun robotInit() {
         // Create the accelerator relay with the predefined port number
@@ -28,10 +25,20 @@ class Robot : IterativeRobot() {
     // Called periodically during autonomous mode
     // The car should always be in autonomous mode when enabled
     override fun autonomousPeriodic() {
-        // Read the data from the LIDAR data file and convert it to a relay state representing
-        // whether the relay should be on or off
-        val relayState = lidarDataFile.readText().toBoolean()
-        // Set the relay's state accordingly using relay state values
-        acceleratorRelay.set(if (relayState) Relay.Value.kOn else Relay.Value.kOff)
+        // Create the file containing the data that should be written by the LIDAR software
+        val lidarDataFile = File(LIDAR_DATA_FILE_PATH)
+        // If the LIDAR data file exists
+        if (lidarDataFile.exists()) {
+            // Read the data from the LIDAR data file, trim whitespace, and convert it to lowercase
+            val lidarData = lidarDataFile.readText().trim().toLowerCase()
+            // Convert it to a Boolean representing whether the relay should be on or off
+            val relayState = lidarData.toBoolean()
+            // Set the relay's state accordingly using a relay-specific data type
+            acceleratorRelay.set(if (relayState) Relay.Value.kOn else Relay.Value.kOff)
+        }
+        // Otherwise, print an error message
+        else {
+            println("Error: LIDAR data file does not exist")
+        }
     }
 }
