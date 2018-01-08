@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.Relay
 import java.io.File
 
 // The channel number of the accelerator relay
-private const val ACCELERATOR_RELAY_CHANNEL = 1
+private const val ACCELERATOR_RELAY_CHANNEL = 3
 
 // The path to the file containing the data from the LIDAR sensor
 private const val LIDAR_DATA_FILE_PATH = "/home/lvuser/lidar.dat"
